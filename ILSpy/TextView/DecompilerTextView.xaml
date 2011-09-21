@@ -6,13 +6,17 @@
 		<BooleanToVisibilityConverter x:Key="boolToVisibility" />
 	</UserControl.Resources>
 	<Grid>
-		<ae:TextEditor
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Decompiled Code" Grid.Row="0" FontFamily="Segoe UI Semilight" FontSize="15" />
+        <ae:TextEditor
 			Name="textEditor"
 			FontFamily="Consolas"
 			FontSize="10pt"
 			IsReadOnly="True"
-			Background="{DynamicResource {x:Static SystemColors.InfoBrushKey}}"
-			Foreground="{DynamicResource {x:Static SystemColors.InfoTextBrushKey}}" />
+			Foreground="{DynamicResource {x:Static SystemColors.InfoTextBrushKey}}" Grid.Row="1" Margin="3" />
 		<Border Name="waitAdorner" Background="#C0FFFFFF" Visibility="Collapsed">
 			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 				<TextBlock FontSize="14pt">Decompiling...</TextBlock>

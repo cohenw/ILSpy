@@ -10,8 +10,8 @@
 		</Grid.ColumnDefinitions>
 		<controls:SearchBox DockPanel.Dock="Top" WatermarkText="Search" WatermarkColor="Gray" ToolTip="Search" Text="{Binding SearchTerm, ElementName=self}" x:Name="searchBox" Grid.Column="0" Grid.Row="0" UpdateDelay="0:0:0.1" PreviewKeyDown="SearchBox_PreviewKeyDown" Margin="3 6 3 0" />
 		<StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
-			<Label Margin="0,-1">Search _for:</Label>
-			<ComboBox Name="searchModeComboBox" Width="100" SelectionChanged="SearchModeComboBox_SelectionChanged">
+			<Label VerticalAlignment="Center" Margin="15 -1 0 -1">Search _for:</Label>
+			<ComboBox Name="searchModeComboBox" Width="100" SelectionChanged="SearchModeComboBox_SelectionChanged" Margin="3">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal">

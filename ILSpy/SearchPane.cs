@@ -196,7 +196,10 @@ namespace ICSharpCode.ILSpy
 			readonly Language language;
 			public readonly ObservableCollection<SearchResult> Results = new ObservableCollection<SearchResult>();
 			int resultCount;
-			
+
+		    readonly bool isExactMatch;
+		    readonly string namespaceScope;
+
 			TypeCode searchTermLiteralType = TypeCode.Empty;
 			object searchTermLiteralValue;
 			
@@ -207,7 +210,13 @@ namespace ICSharpCode.ILSpy
 				this.searchTerm = searchTerm;
 				this.language = language;
 				this.searchMode = searchMode;
-				
+			
+	            if (searchTerm.StartsWith("="))
+	            {
+	                isExactMatch = true;
+	                this.searchTerm = searchTerm.Replace("=", "");
+	            }    
+
 				this.Results.Add(new SearchResult { Name = "Searching..." });
 			}
 			
@@ -279,7 +288,8 @@ namespace ICSharpCode.ILSpy
 			
 			bool IsMatch(string text)
 			{
-				if (text.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0)
+			    var index = text.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase);
+				if (index >= 0 && isExactMatch == false || index == 0 && isExactMatch)
 					return true;
 				else
 					return false;
