@@ -12,9 +12,6 @@
 	TextOptions.TextFormattingMode="Display"
 	FocusManager.FocusedElement="{Binding ElementName=treeView}"
 >
-	<Window.Resources>
-		<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-	</Window.Resources>
 	<Window.CommandBindings>
 		<CommandBinding
 			Command="Open"
@@ -38,6 +35,7 @@
 			Executed="SearchCommandExecuted" />
 	</Window.CommandBindings>
 	<DockPanel>
+        
 		<!-- Main menu -->
 		<Menu DockPanel.Dock="Top" Name="mainMenu">
 			<MenuItem Header="_File" /> <!-- contents of file menu are added using MEF -->
@@ -49,35 +47,20 @@
 				</MenuItem>
 			</MenuItem>
 		</Menu>
-		<!-- ToolBar -->
-		<ToolBar
-			Name="toolBar"
+		
+        <!-- ToolBar -->
+        <StackPanel x:Name="toolBar" Orientation="Horizontal"
 			DockPanel.Dock="Top">
-			<ToolBar.Resources>
-				<!-- Make images transparent if menu command is disabled -->
-				<Style TargetType="{x:Type Image}">
-					<Style.Triggers>
-						<DataTrigger
-							Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ButtonBase}, AncestorLevel=1}, Path=IsEnabled}"
-							Value="False">
-							<Setter Property="Opacity" Value="0.30" />
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</ToolBar.Resources>
-			<!-- 'Navigation' toolbar category is inserted here -->
-			<Separator />
-			<!-- 'Open' toolbar category is inserted here -->
-			<Separator />
-			<CheckBox IsChecked="{Binding FilterSettings.ShowInternalApi}" ToolTip="Show internal types and members">
-				<Image Width="16" Height="16" Source="Images/PrivateInternal.png" />
-			</CheckBox>
-			<Separator />
-			<ComboBox Name="languageComboBox" DisplayMemberPath="Name" Width="100"
+            <CheckBox IsChecked="{Binding FilterSettings.ShowInternalApi}" ToolTip="Show internal types and members">
+                <Image Width="16" Height="16" Source="Images/PrivateInternal.png" />
+            </CheckBox>
+            <Separator />
+            <ComboBox Name="languageComboBox" DisplayMemberPath="Name" Width="100"
 			          ItemsSource="{x:Static local:Languages.AllLanguages}"
 			          SelectedItem="{Binding FilterSettings.Language}"/>
-		</ToolBar>
-		<!-- Status bar -->
+        </StackPanel>
+        
+        <!-- Status bar -->
 		<StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Height="26" Visibility="Collapsed">
 			<StatusBarItem DockPanel.Dock="Right">
 				<TextBlock VerticalAlignment="Center"

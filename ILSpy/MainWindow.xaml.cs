@@ -113,17 +113,17 @@ namespace ICSharpCode.ILSpy
 			foreach (var commandGroup in toolbarCommands.OrderBy(c => c.Metadata.ToolbarOrder).GroupBy(c => c.Metadata.ToolbarCategory)) {
 				if (commandGroup.Key == "Navigation") {
 					foreach (var command in commandGroup) {
-						toolBar.Items.Insert(navigationPos++, MakeToolbarItem(command));
+						toolBar.Children.Insert(navigationPos++, MakeToolbarItem(command));
 						openPos++;
 					}
 				} else if (commandGroup.Key == "Open") {
 					foreach (var command in commandGroup) {
-						toolBar.Items.Insert(openPos++, MakeToolbarItem(command));
+						toolBar.Children.Insert(openPos++, MakeToolbarItem(command));
 					}
 				} else {
-					toolBar.Items.Add(new Separator());
+					toolBar.Children.Add(new Separator());
 					foreach (var command in commandGroup) {
-						toolBar.Items.Add(MakeToolbarItem(command));
+						toolBar.Children.Add(MakeToolbarItem(command));
 					}
 				}
 			}
@@ -140,7 +140,7 @@ namespace ICSharpCode.ILSpy
 					Width = 16,
 					Height = 16,
 					Source = Images.LoadImage(command.Value, command.Metadata.ToolbarIcon)
-				}
+				}, Style = this.FindResource("SimpleButton") as Style
 			};
 		}
 		#endregion
@@ -766,9 +766,9 @@ namespace ICSharpCode.ILSpy
 			return mainMenu.Items;
 		}
 		
-		public ItemCollection GetToolBarItems()
+		public UIElementCollection GetToolBarItems()
 		{
-			return toolBar.Items;
+			return toolBar.Children;
 		}
 	}
 }

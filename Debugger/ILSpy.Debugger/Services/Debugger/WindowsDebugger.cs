@@ -165,10 +165,18 @@ namespace ICSharpCode.ILSpy.Debugger.Services
 						string msg = "CannotStartProcess";
 						msg += " " + e.Message;
 						// TODO: Remove
-						if (e is COMException && ((uint)((COMException)e).ErrorCode == 0x80070032)) {
-							msg += Environment.NewLine + Environment.NewLine;
-							msg += "64-bit debugging is not supported.  Please set Project -> Project Options... -> Compiling -> Target CPU to 32bit.";
-						}
+                        try
+                        {
+                            if (e is COMException && ((uint)((COMException)e).ErrorCode == 0x80070032))
+                            {
+                                msg += Environment.NewLine + Environment.NewLine;
+                                msg += "64-bit debugging is not supported.  Please set Project -> Project Options... -> Compiling -> Target CPU to 32bit.";
+                            }
+                        }
+                        catch (OverflowException)
+                        {
+                            // swallow 
+                        }
 						MessageBox.Show(msg);
 						
 						if (DebugStopped != null)
