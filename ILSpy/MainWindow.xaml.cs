@@ -140,7 +140,7 @@ namespace ICSharpCode.ILSpy
 					Width = 16,
 					Height = 16,
 					Source = Images.LoadImage(command.Value, command.Metadata.ToolbarIcon)
-				}, Style = this.FindResource("SimpleButton") as Style
+				}, Style = this.FindResource("ToolbarButton") as Style
 			};
 		}
 		#endregion

@@ -35,30 +35,46 @@
 			Executed="SearchCommandExecuted" />
 	</Window.CommandBindings>
 	<DockPanel>
-        
-		<!-- Main menu -->
-		<Menu DockPanel.Dock="Top" Name="mainMenu">
-			<MenuItem Header="_File" /> <!-- contents of file menu are added using MEF -->
-			<MenuItem Header="_View">
-				<MenuItem Header="Show _internal types and members" IsCheckable="True" IsChecked="{Binding FilterSettings.ShowInternalApi}">
-					<MenuItem.Icon>
-						<Image Width="16" Height="16" Source="Images/PrivateInternal.png" />
-					</MenuItem.Icon>
-				</MenuItem>
-			</MenuItem>
-		</Menu>
-		
-        <!-- ToolBar -->
-        <StackPanel x:Name="toolBar" Orientation="Horizontal"
-			DockPanel.Dock="Top">
-            <CheckBox IsChecked="{Binding FilterSettings.ShowInternalApi}" ToolTip="Show internal types and members">
-                <Image Width="16" Height="16" Source="Images/PrivateInternal.png" />
-            </CheckBox>
-            <Separator />
-            <ComboBox Name="languageComboBox" DisplayMemberPath="Name" Width="100"
+
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Main menu -->
+            <Menu  Name="mainMenu" Grid.Row="0">
+                <MenuItem Header="_File" />
+                <!-- contents of file menu are added using MEF -->
+                <MenuItem Header="_View">
+                    <MenuItem Header="Show _internal types and members" IsCheckable="True" IsChecked="{Binding FilterSettings.ShowInternalApi}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="Images/PrivateInternal.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+
+            <!-- ToolBar -->
+            <StackPanel x:Name="toolBar" Orientation="Horizontal"
+			Grid.Row="1">
+                <CheckBox IsChecked="{Binding FilterSettings.ShowInternalApi}" ToolTip="Show internal types and members" VerticalAlignment="Center">
+                    <Image Width="16" Height="16" Source="Images/PrivateInternal.png" />
+                </CheckBox>
+                <Separator />
+                <ComboBox Name="languageComboBox" DisplayMemberPath="Name" Width="100"
 			          ItemsSource="{x:Static local:Languages.AllLanguages}"
-			          SelectedItem="{Binding FilterSettings.Language}"/>
-        </StackPanel>
+			          SelectedItem="{Binding FilterSettings.Language}" VerticalAlignment="Center"/>
+            </StackPanel>
+
+
+        </Grid>
+        
+		
         
         <!-- Status bar -->
 		<StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Height="26" Visibility="Collapsed">
