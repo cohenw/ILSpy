@@ -122,12 +122,7 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images" />
-    <Folder Include="Models\TreeModel" />
-    <Folder Include="Commands" />
-    <Folder Include="ToolTips" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="ToolTips\DebuggerTooltipControl.xaml" />
     <Page Include="ToolTips\PinControlsDictionary.xaml" />
@@ -244,6 +239,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\application-x-executable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\debug.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

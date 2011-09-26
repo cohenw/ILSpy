@@ -138,8 +138,8 @@ namespace ICSharpCode.ILSpy
 				ToolTip = command.Metadata.ToolTip,
 				Tag = command.Metadata.Tag,
 				Content = new Image {
-					Width = 16,
-					Height = 16,
+					Width = 48,
+					Height = 48,
 					Source = Images.LoadImage(command.Value, command.Metadata.ToolbarIcon)
 				}, Style = this.FindResource("ToolbarButton") as Style
 			};
@@ -708,8 +708,6 @@ namespace ICSharpCode.ILSpy
 		    CreateFadeInAnimation(ref topPaneFadeInAnimation);
 			ShowPane(topPane, topPaneFadeInAnimation, title, content, SessionSettings.TopPaneSplitterPosition, topPaneRow);
 		}
-
-	    
 
 	    void TopPane_CloseButtonClicked(object sender, EventArgs e)
 		{

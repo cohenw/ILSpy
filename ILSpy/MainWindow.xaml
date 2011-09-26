@@ -63,7 +63,7 @@
             <StackPanel x:Name="toolBar" Orientation="Horizontal"
 			Grid.Row="1">
                 <CheckBox IsChecked="{Binding FilterSettings.ShowInternalApi}" ToolTip="Show internal types and members" VerticalAlignment="Center">
-                    <Image Width="16" Height="16" Source="Images/PrivateInternal.png" />
+                    <Image Width="64" Height="64" Source="Images/Toolbar/Private_Internal.png" />
                 </CheckBox>
                 <Separator />
                 <ComboBox Name="languageComboBox" DisplayMemberPath="Name" Width="100"

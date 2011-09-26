@@ -177,7 +177,7 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
 		}
 	}
 	
-	[ExportContextMenuEntry(Header = "_Debug Assembly", Icon = "Images/application-x-executable.png")]
+	[ExportContextMenuEntry(Header = "_Debug Assembly", Icon = "Images/debug.png")]
 	internal sealed class DebugExecutableNodeCommand : DebuggerCommand, IContextMenuEntry
 	{
 		public bool IsVisible(SharpTreeNode[] selectedNodes)
@@ -222,12 +222,12 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
 	}
 	
 	[ExportToolbarCommand(ToolTip = "Debug an executable",
-	                      ToolbarIcon = "Images/application-x-executable.png",
+	                      ToolbarIcon = "Images/debug.png",
 	                      ToolbarCategory = "Debugger",
 	                      Tag = "Debugger",
 	                      ToolbarOrder = 0)]
 	[ExportMainMenuCommand(Menu = "_Debugger",
-	                       MenuIcon = "Images/application-x-executable.png",
+	                       MenuIcon = "Images/debug.png",
 	                       MenuCategory = "Start",
 	                       Header = "Debug an _executable",
 	                       MenuOrder = 0)]

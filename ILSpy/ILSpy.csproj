@@ -382,12 +382,23 @@
       <Name>ICSharpCode.TreeView</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\back.png" />
+    <Resource Include="Images\Toolbar\folder.png" />
+    <Resource Include="Images\Toolbar\forward.png" />
+    <Resource Include="Images\Toolbar\refresh.png" />
+    <Resource Include="Images\Toolbar\search.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\ResourceXml.png" />
     <Resource Include="Images\ResourceXsd.png" />
     <Resource Include="Images\ResourceXslt.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\private_internal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Toolbar\debug.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
