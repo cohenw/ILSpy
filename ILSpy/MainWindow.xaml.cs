@@ -30,8 +30,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-
+using ICSharpCode.ILSpy.Controls;
 using ICSharpCode.ILSpy.Debugger;
 using ICSharpCode.ILSpy.TextView;
 using ICSharpCode.ILSpy.TreeNodes;
@@ -695,21 +696,22 @@ namespace ICSharpCode.ILSpy
 				sessionSettings.BottomPaneSplitterPosition = bottomPaneRow.Height.Value / (bottomPaneRow.Height.Value + textViewRow.Height.Value);
 			sessionSettings.Save();
 		}
-		
+
+	    private DoubleAnimation topPaneFadeInAnimation;
+	    private DoubleAnimation topPaneFadeOutAnimation;
+        private DoubleAnimation bottomPaneFadeInAnimation;
+        private DoubleAnimation bottomPaneFadeOutAnimation;
+
 		#region Top/Bottom Pane management
 		public void ShowInTopPane(string title, object content)
 		{
-			topPaneRow.MinHeight = 100;
-			if (sessionSettings.TopPaneSplitterPosition > 0 && sessionSettings.TopPaneSplitterPosition < 1) {
-				textViewRow.Height = new GridLength(1 - sessionSettings.TopPaneSplitterPosition, GridUnitType.Star);
-				topPaneRow.Height = new GridLength(sessionSettings.TopPaneSplitterPosition, GridUnitType.Star);
-			}
-			topPane.Title = title;
-			topPane.Content = content;
-			topPane.Visibility = Visibility.Visible;
+		    CreateFadeInAnimation(ref topPaneFadeInAnimation);
+			ShowPane(topPane, topPaneFadeInAnimation, title, content, SessionSettings.TopPaneSplitterPosition, topPaneRow);
 		}
-		
-		void TopPane_CloseButtonClicked(object sender, EventArgs e)
+
+	    
+
+	    void TopPane_CloseButtonClicked(object sender, EventArgs e)
 		{
 			sessionSettings.TopPaneSplitterPosition = topPaneRow.Height.Value / (topPaneRow.Height.Value + textViewRow.Height.Value);
 			topPaneRow.MinHeight = 0;
@@ -724,16 +726,25 @@ namespace ICSharpCode.ILSpy
 		
 		public void ShowInBottomPane(string title, object content)
 		{
-			bottomPaneRow.MinHeight = 100;
-			if (sessionSettings.BottomPaneSplitterPosition > 0 && sessionSettings.BottomPaneSplitterPosition < 1) {
-				textViewRow.Height = new GridLength(1 - sessionSettings.BottomPaneSplitterPosition, GridUnitType.Star);
-				bottomPaneRow.Height = new GridLength(sessionSettings.BottomPaneSplitterPosition, GridUnitType.Star);
-			}
-			bottomPane.Title = title;
-			bottomPane.Content = content;
-			bottomPane.Visibility = Visibility.Visible;
+            CreateFadeInAnimation(ref bottomPaneFadeInAnimation);
+            ShowPane(bottomPane, bottomPaneFadeInAnimation, title, content, SessionSettings.BottomPaneSplitterPosition, bottomPaneRow);
 		}
 		
+        private void ShowPane(DockedPane pane, DoubleAnimation fadeInAnimation, string title, object content, double rowHeight, RowDefinition rowDefinition)
+        {
+            rowDefinition.MinHeight = 100;
+            if (rowHeight > 0 && rowHeight < 1)
+            {
+                textViewRow.Height = new GridLength(1 - rowHeight, GridUnitType.Star);
+                rowDefinition.Height = new GridLength(rowHeight, GridUnitType.Star);
+            }
+            pane.Title = title;
+            pane.Content = content;
+            pane.Opacity = 0;
+            pane.Visibility = Visibility.Visible;
+            pane.BeginAnimation(OpacityProperty, fadeInAnimation);
+        }
+
 		void BottomPane_CloseButtonClicked(object sender, EventArgs e)
 		{
 			sessionSettings.BottomPaneSplitterPosition = bottomPaneRow.Height.Value / (bottomPaneRow.Height.Value + textViewRow.Height.Value);
@@ -770,5 +781,13 @@ namespace ICSharpCode.ILSpy
 		{
 			return toolBar.Children;
 		}
+
+        private void CreateFadeInAnimation(ref DoubleAnimation doubleAnimation)
+        {
+            if (doubleAnimation == null)
+            {
+                doubleAnimation = new DoubleAnimation { Duration = new Duration(new TimeSpan(0, 0, 0, 0, 500)), FillBehavior = FillBehavior.HoldEnd, From = 0, To = 1 };
+            }
+        }
 	}
 }
