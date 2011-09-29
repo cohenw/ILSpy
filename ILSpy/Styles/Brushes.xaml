@@ -6,5 +6,11 @@
     <SolidColorBrush x:Key="FocusButtonBrush" Color="#999" />
     <SolidColorBrush x:Key="MouseOverButtonBrush" Color="#CCC" />
     <SolidColorBrush x:Key="LightTextBrush" Color="#999" />
+
+    <SolidColorBrush x:Key="ChromeDarkAccent1" Color="#322340" />
+    <SolidColorBrush x:Key="ChromeAccent" Color="#4D3663" />
+    <SolidColorBrush x:Key="ChromeLightAccent1" Color="#684A87" />
+    <SolidColorBrush x:Key="ChromeLightAccent2" Color="#986DC6" />
+
     
 </ResourceDictionary>

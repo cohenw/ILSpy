@@ -18,6 +18,8 @@
     <ApplicationIcon>Images\ILSpy.ico</ApplicationIcon>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <StartArguments>/separate</StartArguments>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -55,6 +57,7 @@
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -225,6 +228,7 @@
     <Resource Include="Images\Breakpoint.png" />
     <Resource Include="Images\CurrentLine.png" />
     <Resource Include="Images\DisabledBreakpoint.png" />
+    <None Include="packages.config" />
     <None Include="Properties\AssemblyInfo.template.cs" />
     <Compile Include="Properties\WPFAssemblyInfo.cs" />
     <Compile Include="MainWindow.xaml.cs">

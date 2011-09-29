@@ -134,17 +134,21 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
 			var toolbarItems = MainWindow.Instance.GetToolBarItems();
 			
 			// menu
-			var items = menuItems.OfType<MenuItem>().Where(m => (m.Header as string) == "_Debugger");
-			foreach (var item in items.First().Items.OfType<MenuItem>()) {
-				string header = (string)item.Header;
-				
-				if (header.StartsWith("Remove") || header.StartsWith("Show")) continue;
-				
-				if (header.StartsWith("Attach") || header.StartsWith("Debug"))
-					item.IsEnabled = enable;
-				else
-					item.IsEnabled = !enable;
-			}
+            if (menuItems != null)
+            {
+                var items = menuItems.OfType<MenuItem>().Where(m => (m.Header as string) == "_Debugger");
+                foreach (var item in items.First().Items.OfType<MenuItem>())
+                {
+                    string header = (string)item.Header;
+
+                    if (header.StartsWith("Remove") || header.StartsWith("Show")) continue;
+
+                    if (header.StartsWith("Attach") || header.StartsWith("Debug"))
+                        item.IsEnabled = enable;
+                    else
+                        item.IsEnabled = !enable;
+                }                
+            }
 			
 			//toolbar
 			var buttons = toolbarItems.OfType<Button>().Where(b => (b.Tag as string) == "Debugger");

@@ -27,6 +27,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -133,15 +134,14 @@ namespace ICSharpCode.ILSpy
 		
 		Button MakeToolbarItem(Lazy<ICommand, IToolbarCommandMetadata> command)
 		{
-			return new Button {
+            var image = new Image { Width = 32, Height = 32, Source = Images.LoadImage(command.Value, command.Metadata.ToolbarIcon) };
+            image.SetValue(RenderOptions.BitmapScalingModeProperty, BitmapScalingMode.HighQuality);
+
+            return new Button {
 				Command = CommandWrapper.Unwrap(command.Value),
 				ToolTip = command.Metadata.ToolTip,
 				Tag = command.Metadata.Tag,
-				Content = new Image {
-					Width = 48,
-					Height = 48,
-					Source = Images.LoadImage(command.Value, command.Metadata.ToolbarIcon)
-				}, Style = this.FindResource("ToolbarButton") as Style
+				Content = image, Style = this.FindResource("ToolbarButton") as Style
 			};
 		}
 		#endregion
@@ -152,35 +152,20 @@ namespace ICSharpCode.ILSpy
 		
 		void InitMainMenu()
 		{
-			foreach (var topLevelMenu in mainMenuCommands.OrderBy(c => c.Metadata.MenuOrder).GroupBy(c => c.Metadata.Menu)) {
-				var topLevelMenuItem = mainMenu.Items.OfType<MenuItem>().FirstOrDefault(m => (m.Header as string) == topLevelMenu.Key);
-				foreach (var category in topLevelMenu.GroupBy(c => c.Metadata.MenuCategory)) {
-					if (topLevelMenuItem == null) {
-						topLevelMenuItem = new MenuItem();
-						topLevelMenuItem.Header = topLevelMenu.Key;
-						mainMenu.Items.Add(topLevelMenuItem);
-					} else if (topLevelMenuItem.Items.Count > 0) {
-						topLevelMenuItem.Items.Add(new Separator());
-					}
-					foreach (var entry in category) {
-						MenuItem menuItem = new MenuItem();
-						menuItem.Command = CommandWrapper.Unwrap(entry.Value);
-						if (!string.IsNullOrEmpty(entry.Metadata.Header))
-							menuItem.Header = entry.Metadata.Header;
-						if (!string.IsNullOrEmpty(entry.Metadata.MenuIcon)) {
-							menuItem.Icon = new Image {
-								Width = 16,
-								Height = 16,
-								Source = Images.LoadImage(entry.Value, entry.Metadata.MenuIcon)
-							};
-						}
-						
-						menuItem.IsEnabled = entry.Metadata.IsEnabled;
-						menuItem.InputGestureText = entry.Metadata.InputGestureText;
-						topLevelMenuItem.Items.Add(menuItem);
-					}
-				}
-			}
+		    var topLevelItems = new List<KeyValuePair<string, List<KeyValuePair<string, ICommand>>>>();
+
+			foreach (var topLevelMenu in mainMenuCommands.OrderBy(c => c.Metadata.MenuOrder).GroupBy(c => c.Metadata.Menu)) 
+            {
+                System.Diagnostics.Debug.Write(topLevelMenu.Key);
+
+                var item = new KeyValuePair<string, List<KeyValuePair<string, ICommand>>>(topLevelMenu.Key, new List<KeyValuePair<string, ICommand>>());
+                foreach (var subItem in mainMenuCommands.Where(a => a.Metadata.Menu == topLevelMenu.Key).OrderBy(a => a.Metadata.MenuOrder))
+                {
+                    item.Value.Add(new KeyValuePair<string, ICommand>(subItem.Metadata.Header, CommandWrapper.Unwrap(subItem.Value)));
+                }
+                topLevelItems.Add(item);
+            }
+		    topLevelMenuItems.ItemsSource = topLevelItems;
 		}
 		#endregion
 		
@@ -772,7 +757,7 @@ namespace ICSharpCode.ILSpy
 		
 		public ItemCollection GetMainMenuItems()
 		{
-			return mainMenu.Items;
+			return null;
 		}
 		
 		public UIElementCollection GetToolBarItems()
@@ -785,6 +770,47 @@ namespace ICSharpCode.ILSpy
             if (doubleAnimation == null)
             {
                 doubleAnimation = new DoubleAnimation { Duration = new Duration(new TimeSpan(0, 0, 0, 0, 500)), FillBehavior = FillBehavior.HoldEnd, From = 0, To = 1 };
+            }
+        }
+
+	    private void TopLevelMenuItemClick(object sender, RoutedEventArgs e)
+	    {
+	        var senderElement = sender as FrameworkElement;
+	        var items = topLevelMenuItems.ItemsSource as List<KeyValuePair<string, List<KeyValuePair<string, ICommand>>>>;
+            if (items != null && senderElement != null)
+            {
+                var view = CollectionViewSource.GetDefaultView(items);
+                view.MoveCurrentTo(senderElement.DataContext);
+                secondaryMenuItems.Focus();
+            }
+	    }
+
+	    private void MainMenuKeyDown(object sender, KeyEventArgs e)
+	    {
+            if (e.Key == Key.Enter)
+            {
+                secondaryMenuItems.Focus();
+            }
+	    }
+
+	    private void SecondaryMenuKeyDown(object sender, KeyEventArgs e)
+	    {
+            if (e.Key == Key.Enter)
+            {
+                var items = secondaryMenuItems.ItemsSource as List<KeyValuePair<string, ICommand>>;
+                if (items != null)
+                {
+                    var view = CollectionViewSource.GetDefaultView(items);
+                    try
+                    {
+                        var current = (KeyValuePair<string, ICommand>)view.CurrentItem;
+                        current.Value.Execute(null);
+                    }
+                    catch (InvalidCastException)
+                    {
+                        // swallow
+                    }
+                }    
             }
         }
 	}
