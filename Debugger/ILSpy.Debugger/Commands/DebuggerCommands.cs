@@ -233,7 +233,7 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
 	[ExportMainMenuCommand(Menu = "_Debugger",
 	                       MenuIcon = "Images/debug.png",
 	                       MenuCategory = "Start",
-	                       Header = "Debug an _executable",
+	                       Header = "Debug _executable",
 	                       MenuOrder = 0)]
 	internal sealed class DebugExecutableCommand : DebuggerCommand
 	{
@@ -276,7 +276,7 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
 	
 	[ExportMainMenuCommand(Menu = "_Debugger",
 	                       MenuCategory = "Start",
-	                       Header = "Attach to _running application",
+	                       Header = "_Attach",
 	                       MenuOrder = 1)]
 	internal sealed class AttachCommand : DebuggerCommand
 	{
@@ -373,7 +373,7 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
 	
 	[ExportMainMenuCommand(Menu = "_Debugger",
 	                       MenuCategory = "SteppingArea",
-	                       Header = "_Detach from running application",
+	                       Header = "_Detach",
 	                       IsEnabled = false,
 	                       MenuOrder = 6)]
 	internal sealed class DetachCommand : DebuggerCommand
@@ -392,7 +392,7 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
 	[ExportMainMenuCommand(Menu = "_Debugger",
 	                       MenuIcon = "Images/DeleteAllBreakpoints.png",
 	                       MenuCategory = "Others",
-	                       Header = "Remove all _breakpoints",
+	                       Header = "Remove _breakpoints",
 	                       MenuOrder = 7)]
 	internal sealed class RemoveBreakpointsCommand : DebuggerCommand
 	{

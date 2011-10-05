@@ -11,6 +11,22 @@
     TextOptions.TextFormattingMode="Display"
     FocusManager.FocusedElement="{Binding ElementName=treeView}"
 >
+    <Window.Resources>
+        <Style x:Key="MetroMenuListBoxItem" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="itemBorder" SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </Window.Resources>
+    
     <Window.CommandBindings>
         <CommandBinding
             Command="Open"
@@ -45,10 +61,12 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ListBox Grid.Row="1" Margin="0,0,50,0" x:Name="topLevelMenuItems" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Right" BorderThickness="0" KeyDown="MainMenuKeyDown">
+            <ListBox Grid.Row="1" Margin="0,0,50,0" x:Name="topLevelMenuItems" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Right" BorderThickness="0" KeyDown="MainMenuKeyDown" ItemContainerStyle="{StaticResource MetroMenuListBoxItem}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding Key}" Click="TopLevelMenuItemClick" />
+                        <Button Click="TopLevelMenuItemClick" x:Name="commandButton" Style="{StaticResource SimpleButton}">
+                            <Label FontSize="18" Content="{Binding Key}" Target="commandButton" />
+                        </Button>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
@@ -58,15 +76,27 @@
                 </ListBox.ItemsPanel>
             </ListBox>
 
-            <ListBox x:Name="secondaryMenuItems" Grid.Row="2" Margin="0,0,50,0" ItemsSource="{Binding ElementName=topLevelMenuItems, Path=SelectedItem.Value}" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Right" BorderThickness="0" KeyDown="SecondaryMenuKeyDown">
+            <ListBox x:Name="secondaryMenuItems" FocusVisualStyle="{x:Null}" Grid.Row="2" Margin="0,0,50,0" ItemsSource="{Binding ElementName=topLevelMenuItems, Path=SelectedItem.Value}" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Right" BorderThickness="0" KeyDown="SecondaryMenuKeyDown" ItemContainerStyle="{StaticResource MetroMenuListBoxItem}" ScrollViewer.CanContentScroll="False">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Button Command="{Binding Value}" Content="{Binding Key}" />
+                        <Button Command="{Binding Value}" Style="{StaticResource SimpleButton}" x:Name="commandButton" Margin="0 100 0 0" Opacity="0">
+                            <Label FontSize="14" Content="{Binding Key}" Target="commandButton" />
+                        </Button>
+                        <DataTemplate.Triggers>
+                            <EventTrigger RoutedEvent="FrameworkElement.Loaded" SourceName="commandButton">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation Storyboard.TargetName="commandButton" Storyboard.TargetProperty="Margin" From="0 100 0 0" To="0 0 0 0" Duration="0:0:0.500"/>
+                                        <DoubleAnimation Storyboard.TargetName="commandButton" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" IsItemsHost="True" />
+                        <StackPanel Height="35" Orientation="Horizontal" IsItemsHost="True" ScrollViewer.CanContentScroll="False" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>

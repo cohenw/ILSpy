@@ -30,6 +30,7 @@
                         </Trigger>
                         <Trigger Property="ToggleButton.IsChecked" Value="true">
                             <Setter Property="Background" TargetName="buttonBackground" Value="{StaticResource PressedButtonBrush}"/>
+                            <Setter Property="Foreground" Value="White" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="buttonBackground" Value="{StaticResource MouseOverButtonBrush}"/>
