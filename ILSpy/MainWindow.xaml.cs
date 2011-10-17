@@ -781,7 +781,7 @@ namespace ICSharpCode.ILSpy
             {
                 var view = CollectionViewSource.GetDefaultView(items);
                 view.MoveCurrentTo(senderElement.DataContext);
-                secondaryMenuItems.Focus();
+                FocusSecondaryMenuItems();
             }
 	    }
 
@@ -789,8 +789,14 @@ namespace ICSharpCode.ILSpy
 	    {
             if (e.Key == Key.Enter)
             {
-                secondaryMenuItems.Focus();
+                FocusSecondaryMenuItems();
             }
+	    }
+
+	    private void FocusSecondaryMenuItems()
+	    {
+	        secondaryMenuItems.Focus();
+	        secondaryMenuItems.SelectedIndex = 0;
 	    }
 
 	    private void SecondaryMenuKeyDown(object sender, KeyEventArgs e)

@@ -404,5 +404,8 @@
   <ItemGroup>
     <Resource Include="Images\Toolbar\debug.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\cubes.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

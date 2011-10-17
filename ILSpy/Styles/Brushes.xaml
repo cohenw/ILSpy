@@ -2,15 +2,25 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
         
-    <SolidColorBrush x:Key="PressedButtonBrush" Color="#666" />
-    <SolidColorBrush x:Key="FocusButtonBrush" Color="#999" />
+    <Color x:Key="ChromeLightAccent2Color" A="255" R="152" G="109" B="198" />
+    <Color x:Key="ChromeAccentColor" A="255" R="77" G="54" B="99" />
+    
+    <SolidColorBrush x:Key="ChromeDarkAccent1" Color="#322340" />
+    <SolidColorBrush x:Key="ChromeAccent" Color="{StaticResource ChromeAccentColor}" />
+    <SolidColorBrush x:Key="ChromeLightAccent1" Color="#684A87" />
+    <SolidColorBrush x:Key="ChromeLightAccent2" Color="{StaticResource ChromeLightAccent2Color}" />
+
+    <SolidColorBrush x:Key="PressedButtonBrush" Color="{StaticResource ChromeLightAccent2Color}" />
+    <SolidColorBrush x:Key="FocusButtonBrush" Color="#684A87" />
     <SolidColorBrush x:Key="MouseOverButtonBrush" Color="#CCC" />
     <SolidColorBrush x:Key="LightTextBrush" Color="#999" />
 
-    <SolidColorBrush x:Key="ChromeDarkAccent1" Color="#322340" />
-    <SolidColorBrush x:Key="ChromeAccent" Color="#4D3663" />
-    <SolidColorBrush x:Key="ChromeLightAccent1" Color="#684A87" />
-    <SolidColorBrush x:Key="ChromeLightAccent2" Color="#986DC6" />
-
+    <LinearGradientBrush x:Key="UIEmphasisBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="{StaticResource ChromeAccentColor}" Offset="0" />
+        <GradientStop Color="{StaticResource ChromeLightAccent2Color}" Offset="1" />
+    </LinearGradientBrush>
     
+    
+    
+    <ImageBrush x:Key="windowBackground" ImageSource="../Images/cubes.png" Viewport="0,0,67,100" ViewportUnits="Absolute" TileMode="Tile" />
 </ResourceDictionary>
