@@ -405,25 +405,9 @@ namespace ICSharpCode.ILSpy.TextView
 				));
 			}
 
-            UpdateHeading(language, treeNodes);
 		}
 
-	    private void UpdateHeading(Language language, IEnumerable<ILSpyTreeNode> treeNodes)
-	    {
-            // sets the text label at the top of the DecompilerTextView, giving the names of the types that have been decompiled
-            // and the language of decompilation
-	        var memberNames = "";
-            foreach (var node in treeNodes)
-            {
-                memberNames += " " + node.Text;
-                if ((node.Children == null || node.Children.Count == 0) && node.Parent != null)
-                {
-                    memberNames += " on " + node.Parent.Text; // makes the formatting look nicer for individual fields 
-                }
-                memberNames += ",";
-            }
-	        decompiledHeading.Text = memberNames.TrimEnd(',') + " - " + language.Name;
-	    }
+
 
 	    sealed class DecompilationContext
 		{

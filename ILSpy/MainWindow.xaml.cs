@@ -33,6 +33,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using ICSharpCode.ILSpy.Controls;
 using ICSharpCode.ILSpy.Debugger;
 using ICSharpCode.ILSpy.TextView;
@@ -266,6 +267,8 @@ namespace ICSharpCode.ILSpy
 		
 		void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
+		    this.Opacity = 0;
+
 			ILSpySettings spySettings = this.spySettings;
 			this.spySettings = null;
 			
@@ -296,6 +299,11 @@ namespace ICSharpCode.ILSpy
 					AboutPage.Display(decompilerTextView);
 				}
 			}
+
+            // setting the opacity to 0 and then using this code to set it back to 1 is kind of a hack to get 
+            // around a problem where the window doesn't render properly when using the shell integration library
+            // but it works, and it looks nice
+		    Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.Opacity = 1));
 		}
 		
 		#region Update Check
@@ -608,8 +616,26 @@ namespace ICSharpCode.ILSpy
 					return;
 			}
 			decompilerTextView.Decompile(this.CurrentLanguage, this.SelectedNodes, new DecompilationOptions() { TextViewState = state });
+            UpdateHeading(this.SelectedNodes);
 		}
-		
+
+        private void UpdateHeading(IEnumerable<ILSpyTreeNode> treeNodes)
+        {
+            // sets the text label at the top of the DecompilerTextView, giving the names of the types that have been decompiled
+            // and the language of decompilation
+            var memberNames = "";
+            foreach (var node in treeNodes)
+            {
+                memberNames += " " + node.Text;
+                if ((node.Children == null || node.Children.Count == 0) && node.Parent != null)
+                {
+                    memberNames += " on " + node.Parent.Text; // makes the formatting look nicer for individual fields 
+                }
+                memberNames += ",";
+            }
+            decompiledHeading.Text = memberNames.TrimEnd(',');
+        }
+
 		void SaveCommandExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
 			if (this.SelectedNodes.Count() == 1) {

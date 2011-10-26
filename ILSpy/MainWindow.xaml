@@ -5,8 +5,8 @@
     xmlns:local="clr-namespace:ICSharpCode.ILSpy" 
     xmlns:controls="clr-namespace:ICSharpCode.ILSpy.Controls"
     xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell" Title="ILSpy"
-    MinWidth="250"
-    MinHeight="200"
+    MinWidth="640"
+    MinHeight="480"
     UseLayoutRounding="True"
     TextOptions.TextFormattingMode="Display"
     x:Name="WindowElement"
@@ -70,13 +70,13 @@
         <Style TargetType="Window">
             <Setter Property="shell:WindowChrome.WindowChrome">
                 <Setter.Value>
-                    <shell:WindowChrome ResizeBorderThickness="6" CaptionHeight="20" GlassFrameThickness="0,0,0,1" CornerRadius="0"/>
+                    <shell:WindowChrome ResizeBorderThickness="6" CaptionHeight="20" GlassFrameThickness="1" CornerRadius="0"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Window}">
-                        <Border Background="White">
+                        <Border Background="White" x:Name="WindowBorder">
                             <Grid>
 
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
@@ -116,6 +116,11 @@
                             </Grid>
 
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=WindowElement, Path=WindowState}" Value="Maximized">
+                                <Setter Property="Padding" TargetName="WindowBorder" Value="{Binding Source={x:Static shell:SystemParameters2.Current}, Path=WindowResizeBorderThickness}"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -140,6 +145,7 @@
 
             <Rectangle Grid.Column="0" Grid.RowSpan="2" Width="25" VerticalAlignment="Stretch" Fill="{StaticResource UIEmphasisBrush}" />
 
+            <!-- primary menu (file, debug etc) -->
             <ListBox Margin="12,0,0,0" Grid.Row="1" Grid.Column="1" x:Name="topLevelMenuItems" Background="Transparent" IsSynchronizedWithCurrentItem="True" BorderThickness="0" KeyDown="MainMenuKeyDown" ItemContainerStyle="{StaticResource MetroMenuListBoxItem}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -155,7 +161,8 @@
                 </ListBox.ItemsPanel>
             </ListBox>
 
-            <ListBox Margin="12,0,0,0" x:Name="secondaryMenuItems" Background="Transparent" FocusVisualStyle="{x:Null}" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding ElementName=topLevelMenuItems, Path=SelectedItem.Value}" IsSynchronizedWithCurrentItem="True" BorderThickness="0" KeyDown="SecondaryMenuKeyDown" ItemContainerStyle="{StaticResource MetroMenuListBoxItem}" ScrollViewer.CanContentScroll="False">
+            <!-- secondary menu -->
+            <ListBox Margin="12,0,0,0" x:Name="secondaryMenuItems" Background="Transparent" FocusVisualStyle="{x:Null}" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding ElementName=topLevelMenuItems, Path=SelectedItem.Value}" IsSynchronizedWithCurrentItem="True" BorderThickness="0" KeyDown="SecondaryMenuKeyDown" ItemContainerStyle="{StaticResource MetroMenuListBoxItem}" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Button Command="{Binding Value}" VerticalAlignment="Center" Style="{StaticResource SimpleButton}" x:Name="commandButton" Margin="0 100 0 0" Opacity="0">
@@ -176,7 +183,7 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <!-- this needs a hard-coded height, otherwise when the menu items slide into the view they cause the rest of the UI to slide too -->
-                        <StackPanel Height="30" Orientation="Horizontal" IsItemsHost="True" ScrollViewer.CanContentScroll="False" />
+                        <StackPanel Height="30" Orientation="Horizontal" IsItemsHost="True" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Hidden" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
@@ -247,7 +254,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="0" Name="topPaneRow" />
                     <RowDefinition Height="1" />
-                    <RowDefinition Height="Auto" MinHeight="100" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="0.7*" MinHeight="100" Name="textViewRow" />
                     <RowDefinition Height="1" />
                     <RowDefinition Height="0" Name="bottomPaneRow" />
@@ -262,9 +269,19 @@
                     </DockPanel>
                 </Border>
 
-                <ComboBox Name="languageComboBox" DisplayMemberPath="Name" Width="100"
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock x:Name="decompiledHeading" Grid.Column="0" Style="{StaticResource headingText}" />
+
+                    <ComboBox Name="languageComboBox" DisplayMemberPath="Name" Width="100"
                       ItemsSource="{x:Static local:Languages.AllLanguages}"
-                      SelectedItem="{Binding FilterSettings.Language}" VerticalAlignment="Center" Grid.Row="3" HorizontalAlignment="Right" Margin="0,0,50,0" />
+                      SelectedItem="{Binding FilterSettings.Language}" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,30,0" />
+
+                </Grid>
 
                 <controls:DockedPane x:Name="topPane" Grid.Row="1" Title="Top" Visibility="Collapsed" CloseButtonClicked="TopPane_CloseButtonClicked" />
                 

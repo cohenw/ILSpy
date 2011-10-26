@@ -7,10 +7,8 @@
 	</UserControl.Resources>
 	<Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock x:Name="decompiledHeading" Grid.Row="0" Style="{StaticResource headingText}" />
         <ae:TextEditor
 			Name="textEditor"
 			FontFamily="Consolas"
