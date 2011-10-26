@@ -40,6 +40,7 @@ using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.ILSpy.XmlDoc;
 using ICSharpCode.TreeView;
 using Microsoft.Win32;
+using Microsoft.Windows.Shell;
 using Mono.Cecil;
 
 namespace ICSharpCode.ILSpy
@@ -115,7 +116,7 @@ namespace ICSharpCode.ILSpy
 			foreach (var commandGroup in toolbarCommands.OrderBy(c => c.Metadata.ToolbarOrder).GroupBy(c => c.Metadata.ToolbarCategory)) {
 				if (commandGroup.Key == "Navigation") {
 					foreach (var command in commandGroup) {
-						toolBar.Children.Insert(navigationPos++, MakeToolbarItem(command));
+                        navToolBar.Children.Insert(navigationPos++, MakeToolbarItem(command));
 						openPos++;
 					}
 				} else if (commandGroup.Key == "Open") {
@@ -158,10 +159,10 @@ namespace ICSharpCode.ILSpy
             {
                 System.Diagnostics.Debug.Write(topLevelMenu.Key);
 
-                var item = new KeyValuePair<string, List<KeyValuePair<string, ICommand>>>(topLevelMenu.Key, new List<KeyValuePair<string, ICommand>>());
+                var item = new KeyValuePair<string, List<KeyValuePair<string, ICommand>>>(topLevelMenu.Key.ToLower(), new List<KeyValuePair<string, ICommand>>());
                 foreach (var subItem in mainMenuCommands.Where(a => a.Metadata.Menu == topLevelMenu.Key).OrderBy(a => a.Metadata.MenuOrder))
                 {
-                    item.Value.Add(new KeyValuePair<string, ICommand>(subItem.Metadata.Header, CommandWrapper.Unwrap(subItem.Value)));
+                    item.Value.Add(new KeyValuePair<string, ICommand>(subItem.Metadata.Header.ToUpper(), CommandWrapper.Unwrap(subItem.Value)));
                 }
                 topLevelItems.Add(item);
             }
@@ -495,7 +496,29 @@ namespace ICSharpCode.ILSpy
 			}
 		}
 		#endregion
-		
+
+        private void CloseWindowExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.CloseWindow((Window)e.Parameter);
+        }
+
+        private void MinimizeWindowExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.MinimizeWindow((Window)e.Parameter);            
+        }
+
+        private void MaximizeWindowExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (this.WindowState != WindowState.Maximized)
+            {
+                SystemCommands.MaximizeWindow((Window)e.Parameter);
+            }
+            else
+            {
+                SystemCommands.RestoreWindow((Window)e.Parameter);
+            }
+        }
+
 		#region Open/Refresh
 		void OpenCommandExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
@@ -819,5 +842,8 @@ namespace ICSharpCode.ILSpy
                 }    
             }
         }
+
+
+
 	}
 }

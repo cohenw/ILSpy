@@ -2,22 +2,26 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
         
-    <Color x:Key="ChromeLightAccent2Color" A="255" R="152" G="109" B="198" />
-    <Color x:Key="ChromeAccentColor" A="255" R="77" G="54" B="99" />
-    
+    <Color x:Key="ChromeLightAccent2Color" A="255" R="185" G="162" B="177" />
+    <Color x:Key="ChromeAccentColor" A="255" R="103" G="31" B="81" />
+    <Color x:Key="ChromeDarkAccentColor" A="255" R="54" G="17" B="43" />
+
+
     <SolidColorBrush x:Key="ChromeDarkAccent1" Color="#322340" />
     <SolidColorBrush x:Key="ChromeAccent" Color="{StaticResource ChromeAccentColor}" />
     <SolidColorBrush x:Key="ChromeLightAccent1" Color="#684A87" />
     <SolidColorBrush x:Key="ChromeLightAccent2" Color="{StaticResource ChromeLightAccent2Color}" />
 
+    
+    
     <SolidColorBrush x:Key="PressedButtonBrush" Color="{StaticResource ChromeLightAccent2Color}" />
     <SolidColorBrush x:Key="FocusButtonBrush" Color="#684A87" />
     <SolidColorBrush x:Key="MouseOverButtonBrush" Color="#CCC" />
     <SolidColorBrush x:Key="LightTextBrush" Color="#999" />
 
-    <LinearGradientBrush x:Key="UIEmphasisBrush" StartPoint="0,0" EndPoint="1,0">
+    <LinearGradientBrush x:Key="UIEmphasisBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="{StaticResource ChromeAccentColor}" Offset="0" />
-        <GradientStop Color="{StaticResource ChromeLightAccent2Color}" Offset="1" />
+        <GradientStop Color="{StaticResource ChromeDarkAccentColor}" Offset="1" />
     </LinearGradientBrush>
     
     

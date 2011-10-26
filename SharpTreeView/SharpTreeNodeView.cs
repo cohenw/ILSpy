@@ -127,6 +127,11 @@ namespace ICSharpCode.TreeView
 
 		internal double CalculateIndent()
 		{
+            if (Node == null)
+            {
+                return -19;
+            }
+
 			var result = 19 * Node.Level;
 			if (ParentTreeView.ShowRoot) {
 				if (!ParentTreeView.ShowRootExpander) {

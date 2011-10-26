@@ -4,21 +4,23 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:tv="clr-namespace:ICSharpCode.TreeView;assembly=ICSharpCode.TreeView"
     xmlns:local="clr-namespace:ICSharpCode.ILSpy" 
     xmlns:controls="clr-namespace:ICSharpCode.ILSpy.Controls"
-    Title="ILSpy"
+    xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell" Title="ILSpy"
     MinWidth="250"
     MinHeight="200"
     UseLayoutRounding="True"
     TextOptions.TextFormattingMode="Display"
+    x:Name="WindowElement"
     FocusManager.FocusedElement="{Binding ElementName=treeView}"
     Background="{StaticResource windowBackground}">
 
     <Window.Resources>
+
         <Style x:Key="MetroMenuListBoxItem" TargetType="{x:Type ListBoxItem}">
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
-                        <Border Name="itemBorder" BorderThickness="0 0 0 3" Margin="2 0" SnapsToDevicePixels="true" VerticalAlignment="Center">
+                        <Border Name="itemBorder" BorderThickness="0" Margin="2 0" SnapsToDevicePixels="true" VerticalAlignment="Center">
                             <ContentPresenter />
                         </Border>
                         <ControlTemplate.Triggers>
@@ -31,8 +33,17 @@
             </Setter>
         </Style>
     </Window.Resources>
-    
+
     <Window.CommandBindings>
+        <CommandBinding Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}"
+                    Executed="MinimizeWindowExecuted"/>
+
+        <CommandBinding Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
+                    Executed="MaximizeWindowExecuted"/>
+
+        <CommandBinding Command="{x:Static shell:SystemCommands.CloseWindowCommand}"
+                    Executed="CloseWindowExecuted"/>
+
         <CommandBinding
             Command="Open"
             Executed="OpenCommandExecuted" />
@@ -54,9 +65,68 @@
             Command="Search"
             Executed="SearchCommandExecuted" />
     </Window.CommandBindings>
+    
+    <Window.Style>
+        <Style TargetType="Window">
+            <Setter Property="shell:WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <shell:WindowChrome ResizeBorderThickness="6" CaptionHeight="20" GlassFrameThickness="0,0,0,1" CornerRadius="0"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Window}">
+                        <Border Background="White">
+                            <Grid>
+
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
+
+                                    <!-- minimise -->
+                                    <Button Style="{StaticResource SimpleButton}" Margin="2" Padding="2" shell:WindowChrome.IsHitTestVisibleInChrome="True"  Command="{x:Static shell:SystemCommands.MinimizeWindowCommand}" CommandParameter="{Binding ElementName=WindowElement}">
+                                        <Path StrokeThickness="4" Stroke="{StaticResource ChromeDarkAccent1}">
+                                            <Path.Data>
+                                                <GeometryGroup>
+                                                    <PathGeometry Figures="M3.12944030761719,10.7686376571655L20.680835723877,10.894907951355" FillRule="NonZero"/>
+                                                </GeometryGroup>
+                                            </Path.Data>
+                                        </Path>
+                                    </Button>
+
+                                    <!-- maximize/restore -->
+                                    <Button Style="{StaticResource SimpleButton}" Margin="2" Padding="2" shell:WindowChrome.IsHitTestVisibleInChrome="True"  Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}" CommandParameter="{Binding ElementName=WindowElement}">
+                                        <Rectangle Width="20" Height="17" StrokeThickness="3" Stroke="{StaticResource ChromeDarkAccent1}" StrokeMiterLimit="4"/>
+                                    </Button>
+                                    
+                                    <!-- close button -->
+                                    <Button Style="{StaticResource SimpleButton}" Margin="2" Padding="2" shell:WindowChrome.IsHitTestVisibleInChrome="True"  Command="{x:Static shell:SystemCommands.CloseWindowCommand}" CommandParameter="{Binding ElementName=WindowElement}">
+                                        <Path StrokeThickness="4" Stroke="{StaticResource ChromeDarkAccent1}">
+                                            <Path.Data>
+                                                <GeometryGroup>
+                                                    <PathGeometry Figures="M18.4695739746094,2.08652973175049L1.80204772949219,17.2388191223145" FillRule="NonZero"/>
+                                                    <PathGeometry Figures="M2.30712890625,1.58145427703857L18.7221069335938,17.2388191223145" FillRule="NonZero"/>
+                                                </GeometryGroup>
+                                            </Path.Data>
+                                        </Path>
+                                    </Button>
+
+                                </StackPanel>
+                                
+                            </Grid>
+
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+    </Window.Style>
+    
+    
     <DockPanel>
 
-        <Grid DockPanel.Dock="Top">
+        <Grid DockPanel.Dock="Top" Margin="-5,15,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
@@ -64,15 +134,18 @@
                 <RowDefinition Height="5" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="35" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ListBox Grid.Row="1" Margin="0 0 25 0" x:Name="topLevelMenuItems" Background="Transparent" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Right" BorderThickness="0" KeyDown="MainMenuKeyDown" ItemContainerStyle="{StaticResource MetroMenuListBoxItem}">
+            <Rectangle Grid.Column="0" Grid.RowSpan="2" Width="25" VerticalAlignment="Stretch" Fill="{StaticResource UIEmphasisBrush}" />
+
+            <ListBox Margin="12,0,0,0" Grid.Row="1" Grid.Column="1" x:Name="topLevelMenuItems" Background="Transparent" IsSynchronizedWithCurrentItem="True" BorderThickness="0" KeyDown="MainMenuKeyDown" ItemContainerStyle="{StaticResource MetroMenuListBoxItem}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Button Click="TopLevelMenuItemClick" x:Name="commandButton" Style="{StaticResource SimpleButton}">
-                            <Label FontSize="18" Content="{Binding Key}" Target="commandButton" Padding="1" FontFamily="Segoe UI" Style="{StaticResource MenuLabel}" />
-                        </Button>
+                        <RadioButton GroupName="TopLevelMenuItems" Click="TopLevelMenuItemClick" x:Name="commandButton" Style="{StaticResource MenuButton}" Padding="0" Margin="0,0,10,0">
+                            <Label FontSize="26" FontWeight="600" Content="{Binding Key}" Target="commandButton" FontFamily="Segoe UI" Style="{StaticResource MenuLabel}" Padding="0" />
+                        </RadioButton>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
@@ -82,11 +155,11 @@
                 </ListBox.ItemsPanel>
             </ListBox>
 
-            <ListBox x:Name="secondaryMenuItems" Background="Transparent" FocusVisualStyle="{x:Null}" Grid.Row="2" Margin="0 0 25 0" ItemsSource="{Binding ElementName=topLevelMenuItems, Path=SelectedItem.Value}" IsSynchronizedWithCurrentItem="True" HorizontalAlignment="Right" BorderThickness="0" KeyDown="SecondaryMenuKeyDown" ItemContainerStyle="{StaticResource MetroMenuListBoxItem}" ScrollViewer.CanContentScroll="False">
+            <ListBox Margin="12,0,0,0" x:Name="secondaryMenuItems" Background="Transparent" FocusVisualStyle="{x:Null}" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding ElementName=topLevelMenuItems, Path=SelectedItem.Value}" IsSynchronizedWithCurrentItem="True" BorderThickness="0" KeyDown="SecondaryMenuKeyDown" ItemContainerStyle="{StaticResource MetroMenuListBoxItem}" ScrollViewer.CanContentScroll="False">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Button Command="{Binding Value}" VerticalAlignment="Center" Style="{StaticResource SimpleButton}" x:Name="commandButton" Margin="0 100 0 0" Opacity="0">
-                            <Label Name="itemLabel" FontSize="12" FontFamily="Segoe UI Semilight" Content="{Binding Key}" Target="commandButton" Style="{StaticResource MenuLabel}" Padding="1" />
+                            <Label Name="itemLabel" FontSize="18" FontFamily="Segoe UI Semilight" Content="{Binding Key}" Target="commandButton" Style="{StaticResource MenuLabel}" Padding="1" />
                         </Button>
                         <DataTemplate.Triggers>
                             <EventTrigger RoutedEvent="FrameworkElement.Loaded" SourceName="commandButton">
@@ -102,27 +175,23 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Height="20" Orientation="Horizontal" IsItemsHost="True" ScrollViewer.CanContentScroll="False" />
+                        <!-- this needs a hard-coded height, otherwise when the menu items slide into the view they cause the rest of the UI to slide too -->
+                        <StackPanel Height="30" Orientation="Horizontal" IsItemsHost="True" ScrollViewer.CanContentScroll="False" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
 
             <!-- ToolBar -->
-            <StackPanel x:Name="toolBar" Orientation="Horizontal"
-            Grid.Row="0" Grid.RowSpan="2" Margin="25 0 0 0">
-                <CheckBox IsChecked="{Binding FilterSettings.ShowInternalApi}" ToolTip="Show internal types and members" VerticalAlignment="Center">
-                    <Image Width="32" Height="32" Source="Images/Toolbar/Private_Internal.png" />
-                </CheckBox>
-                <Separator />
-                <ComboBox Name="languageComboBox" DisplayMemberPath="Name" Width="100"
-                      ItemsSource="{x:Static local:Languages.AllLanguages}"
-                      SelectedItem="{Binding FilterSettings.Language}" VerticalAlignment="Center"/>
+            <StackPanel x:Name="parentToolbar" Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                <StackPanel Orientation="Horizontal" x:Name="navToolBar" Margin="10,0,35,0" />
+                <StackPanel Orientation="Horizontal" x:Name="toolBar">
+                    <ToggleButton IsChecked="{Binding FilterSettings.ShowInternalApi}" ToolTip="Show internal types and members" VerticalAlignment="Center" Style="{StaticResource ToolbarButton}">
+                        <Image Width="32" Height="32" Source="Images/Toolbar/Private_Internal.png" />
+                    </ToggleButton>
+                </StackPanel>
             </StackPanel>
-
-
+            
         </Grid>
-        
-        
         
         <!-- Status bar -->
         <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Height="26" Visibility="Collapsed">
@@ -134,6 +203,7 @@
                            Text="Stand by..."/>
             </StatusBarItem>
         </StatusBar>
+        
         <!-- Main grid separating left pane (treeView) from main pane (textEditor) -->
         <Grid>
             <Grid.ColumnDefinitions>
@@ -177,6 +247,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="0" Name="topPaneRow" />
                     <RowDefinition Height="1" />
+                    <RowDefinition Height="Auto" MinHeight="100" />
                     <RowDefinition Height="0.7*" MinHeight="100" Name="textViewRow" />
                     <RowDefinition Height="1" />
                     <RowDefinition Height="0" Name="bottomPaneRow" />
@@ -190,7 +261,11 @@
                         </StackPanel>
                     </DockPanel>
                 </Border>
-                
+
+                <ComboBox Name="languageComboBox" DisplayMemberPath="Name" Width="100"
+                      ItemsSource="{x:Static local:Languages.AllLanguages}"
+                      SelectedItem="{Binding FilterSettings.Language}" VerticalAlignment="Center" Grid.Row="3" HorizontalAlignment="Right" Margin="0,0,50,0" />
+
                 <controls:DockedPane x:Name="topPane" Grid.Row="1" Title="Top" Visibility="Collapsed" CloseButtonClicked="TopPane_CloseButtonClicked" />
                 
                 <GridSplitter
@@ -204,7 +279,7 @@
                     Visibility="{Binding Visibility, ElementName=topPane}" />
                 
                 <!-- decompilerTextView is into the mainPane by code -->
-                <ContentPresenter Name="mainPane" Margin="0 0 25 25" Grid.Row="3" Opacity="0.7"/>
+                <ContentPresenter Name="mainPane" Margin="0 0 25 25" Grid.Row="4" Opacity="0.7"/>
                 
                 <GridSplitter
                     Grid.ZIndex="1"
@@ -219,5 +294,6 @@
                 <controls:DockedPane x:Name="bottomPane" Grid.Row="5" Title="Bottom" Visibility="Collapsed" CloseButtonClicked="BottomPane_CloseButtonClicked" />
             </Grid>
         </Grid>
+        
     </DockPanel>
 </Window>
