@@ -28,8 +28,8 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
 				// check if the codemappings exists for this line
 				var storage = DebugInformation.CodeMappings;
 				int token = 0;
-				foreach (var storageEntry in storage) {
-					var instruction = storageEntry.Value.GetInstructionByLineNumber(line, out token);
+				foreach (var storageEntry in storage.Values) {
+					var instruction = storageEntry.GetInstructionByLineNumber(line, out token);
 					
 					if (instruction == null) {
 						continue;
@@ -40,8 +40,7 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
 						instruction.MemberMapping.MemberReference,
 						line,
 						token, 
-						instruction.ILInstructionOffset,
-						DebugInformation.Language);
+						instruction.ILInstructionOffset);
 					break;
 				}
 				
@@ -54,12 +53,13 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
 		}
 	}
 	
+	/*
 	[ExportBookmarkContextMenuEntry(Header="Disable Breakpoint", Category="Debugger")]
 	public class DisableBreakpointCommand : IBookmarkContextMenuEntry
 	{
-    public bool IsVisible(IBookmark[] bookmarks)
+    public bool IsVisible(IBookmark bookmark)
     {
-      return bookmarks.Any(b => b is BreakpointBookmark && (b as BreakpointBookmark).IsEnabled);
+      return b => b is BreakpointBookmark && (b as BreakpointBookmark).IsEnabled;
     }
   	  
     public bool IsEnabled(IBookmark[] bookmarks)
@@ -71,5 +71,5 @@ namespace ICSharpCode.ILSpy.Debugger.Commands
     {
       throw new NotImplementedException();
     }
-	}
+	}*/
 }
