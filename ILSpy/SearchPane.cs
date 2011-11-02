@@ -95,9 +95,7 @@ namespace ICSharpCode.ILSpy
 					StartSearch(this.SearchTerm);
 				}
 			}
-			Dispatcher.BeginInvoke(
-				DispatcherPriority.Background,
-				new Func<bool>(searchBox.Focus));
+			
 		}
 		
 		public static readonly DependencyProperty SearchTermProperty =
@@ -177,7 +175,7 @@ namespace ICSharpCode.ILSpy
 			}
 		}
 		
-		void SearchBox_PreviewKeyDown(object sender, KeyEventArgs e)
+		public void SearchBox_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Down && listBox.HasItems) {
 				e.Handled = true;

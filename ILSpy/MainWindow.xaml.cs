@@ -300,6 +300,8 @@ namespace ICSharpCode.ILSpy
 				}
 			}
 
+		    searchBox.DataContext = SearchPane.Instance;
+
             // setting the opacity to 0 and then using this code to set it back to 1 is kind of a hack to get 
             // around a problem where the window doesn't render properly when using the shell integration library
             // but it works, and it looks nice
@@ -583,10 +585,13 @@ namespace ICSharpCode.ILSpy
 				e.Handled = false;
 			}
 		}
-		
+
 		void SearchCommandExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
-			SearchPane.Instance.Show();
+            SearchPane.Instance.Show();
+            Dispatcher.BeginInvoke(
+                DispatcherPriority.Background,
+                new Func<bool>(searchBox.Focus));
 		}
 		#endregion
 		
@@ -880,6 +885,13 @@ namespace ICSharpCode.ILSpy
         }
 
 
-
+	    private void SearchBox_PreviewKeyDown(object sender, KeyEventArgs e)
+	    {
+            if (!SearchPane.Instance.IsVisible)
+            {
+                SearchPane.Instance.Show();
+            }
+            SearchPane.Instance.SearchBox_PreviewKeyDown(sender, e);
+	    }
 	}
 }

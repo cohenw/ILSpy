@@ -4,7 +4,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:tv="clr-namespace:ICSharpCode.TreeView;assembly=ICSharpCode.TreeView"
     xmlns:local="clr-namespace:ICSharpCode.ILSpy" 
     xmlns:controls="clr-namespace:ICSharpCode.ILSpy.Controls"
-    xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell" Title="ILSpy"
+    xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
+    xmlns:System="clr-namespace:System;assembly=mscorlib" Title="ILSpy"
     MinWidth="640"
     MinHeight="480"
     UseLayoutRounding="True"
@@ -15,6 +16,8 @@
 
     <Window.Resources>
 
+        <System:Double x:Key="MetroOpacity">0.7</System:Double>
+        
         <Style x:Key="MetroMenuListBoxItem" TargetType="{x:Type ListBoxItem}">
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="Template">
@@ -199,7 +202,7 @@
             </StackPanel>
 
             <!-- search -->
-            <controls:SearchBox DockPanel.Dock="Top" WatermarkText="Search" WatermarkColor="Gray" ToolTip="Search" VerticalAlignment="Bottom" Text="{Binding SearchTerm, ElementName=self}" x:Name="searchBox" Grid.Column="1" Grid.Row="1" UpdateDelay="0:0:0.1" HorizontalAlignment="Right" Margin="0,0,30,0" Width="200" />
+            <controls:SearchBox DockPanel.Dock="Top" WatermarkText="Search" WatermarkColor="Gray" ToolTip="Search" VerticalAlignment="Bottom" Text="{Binding SearchTerm}" x:Name="searchBox" Grid.Column="1" Grid.Row="1" UpdateDelay="0:0:0.1" HorizontalAlignment="Right" Margin="0,0,30,0" PreviewKeyDown="SearchBox_PreviewKeyDown" Width="200" />
 
         </Grid>
         
@@ -238,7 +241,7 @@
                 SelectionChanged="TreeView_SelectionChanged"
                 ShowRoot="False"
                 AllowDropOrder="True"
-                AllowDrop="True" Margin="25 0 25 25" Opacity="0.7" BorderBrush="Transparent" />
+                AllowDrop="True" Margin="25 0 25 25" Opacity="{DynamicResource MetroOpacity}" BorderBrush="Transparent" />
             <GridSplitter
                 Grid.ZIndex="1"
                 Grid.Column="1"
@@ -286,7 +289,7 @@
 
                 </Grid>
 
-                <controls:DockedPane x:Name="topPane" Grid.Row="1" Title="Top" Visibility="Collapsed" CloseButtonClicked="TopPane_CloseButtonClicked" Margin="0,0,25,0" />
+                <controls:DockedPane x:Name="topPane" Grid.Row="1" Title="Top" Visibility="Collapsed" CloseButtonClicked="TopPane_CloseButtonClicked" Margin="0,0,25,0" Opacity="{DynamicResource MetroOpacity}" />
                 
                 <GridSplitter
                     Grid.ZIndex="1"
@@ -299,7 +302,7 @@
                     Visibility="{Binding Visibility, ElementName=topPane}" />
                 
                 <!-- decompilerTextView is into the mainPane by code -->
-                <ContentPresenter Name="mainPane" Margin="0 0 25 25" Grid.Row="4" Opacity="0.7"/>
+                <ContentPresenter Name="mainPane" Margin="0 0 25 25" Grid.Row="4" Opacity="{DynamicResource MetroOpacity}"/>
                 
                 <GridSplitter
                     Grid.ZIndex="1"
@@ -310,8 +313,8 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Visibility="{Binding Visibility, ElementName=bottomPane}" />
-                
-                <controls:DockedPane x:Name="bottomPane" Grid.Row="6" Title="Bottom" Visibility="Collapsed" CloseButtonClicked="BottomPane_CloseButtonClicked" Margin="0, 25,25,25" />
+
+                <controls:DockedPane x:Name="bottomPane" Grid.Row="6" Title="Bottom" Visibility="Collapsed" CloseButtonClicked="BottomPane_CloseButtonClicked" Margin="0, 25,25,25" Opacity="{DynamicResource MetroOpacity}" />
             </Grid>
         </Grid>
         
