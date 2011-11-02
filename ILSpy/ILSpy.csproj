@@ -51,6 +51,12 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MahApps.Metro">
+      <HintPath>..\packages\MahApps.Metro.0.2\lib\net40\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro.Controls">
+      <HintPath>..\packages\MahApps.Metro.0.2\lib\net40\MahApps.Metro.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -70,6 +76,9 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.0.2\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -227,6 +236,7 @@
     <Resource Include="Images\Breakpoint.png" />
     <Resource Include="Images\CurrentLine.png" />
     <Resource Include="Images\DisabledBreakpoint.png" />
+    <None Include="packages.config" />
     <None Include="Properties\AssemblyInfo.template.cs" />
     <Compile Include="Properties\WPFAssemblyInfo.cs" />
     <Compile Include="MainWindow.xaml.cs">
