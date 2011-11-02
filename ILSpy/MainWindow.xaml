@@ -286,7 +286,7 @@
 
                 </Grid>
 
-                <controls:DockedPane x:Name="topPane" Grid.Row="1" Title="Top" Visibility="Collapsed" CloseButtonClicked="TopPane_CloseButtonClicked" />
+                <controls:DockedPane x:Name="topPane" Grid.Row="1" Title="Top" Visibility="Collapsed" CloseButtonClicked="TopPane_CloseButtonClicked" Margin="0,0,25,0" />
                 
                 <GridSplitter
                     Grid.ZIndex="1"
@@ -303,7 +303,7 @@
                 
                 <GridSplitter
                     Grid.ZIndex="1"
-                    Grid.Row="4"
+                    Grid.Row="5"
                     Margin="0,-2,0,-5"
                     BorderThickness="0,2,0,5"
                     BorderBrush="Transparent"
@@ -311,7 +311,7 @@
                     VerticalAlignment="Center"
                     Visibility="{Binding Visibility, ElementName=bottomPane}" />
                 
-                <controls:DockedPane x:Name="bottomPane" Grid.Row="5" Title="Bottom" Visibility="Collapsed" CloseButtonClicked="BottomPane_CloseButtonClicked" />
+                <controls:DockedPane x:Name="bottomPane" Grid.Row="6" Title="Bottom" Visibility="Collapsed" CloseButtonClicked="BottomPane_CloseButtonClicked" Margin="0, 25,25,25" />
             </Grid>
         </Grid>
         
