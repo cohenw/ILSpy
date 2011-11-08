@@ -1,5 +1,5 @@
 ﻿<UserControl x:Class="ICSharpCode.ILSpy.SearchPane" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:controls="clr-namespace:ICSharpCode.ILSpy.Controls" x:Name="self">
-	<Grid>
+	<Grid Opacity="0.8">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
@@ -21,7 +21,7 @@
 				</ComboBox.ItemTemplate>
 			</ComboBox>
 		</StackPanel>
-		<ListBox Name="listBox" HorizontalContentAlignment="Stretch" SelectionMode="Single" MouseDoubleClick="ListBox_MouseDoubleClick" KeyDown="ListBox_KeyDown" Grid.Row="1" Grid.ColumnSpan="2" Margin="3">
+        <ListBox Name="listBox" HorizontalContentAlignment="Stretch" SelectionMode="Single" MouseDoubleClick="ListBox_MouseDoubleClick" BorderThickness="0" KeyDown="ListBox_KeyDown" Grid.Row="1" Grid.ColumnSpan="2" Margin="3">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<Grid Margin="3">

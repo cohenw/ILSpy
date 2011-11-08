@@ -169,7 +169,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Button Command="{Binding Value}" VerticalAlignment="Center" Style="{StaticResource SimpleButton}" x:Name="commandButton" Margin="0 100 0 0" Opacity="0">
-                            <Label Name="itemLabel" FontSize="18" FontFamily="Segoe UI Semilight" Content="{Binding Key}" Target="commandButton" Style="{StaticResource MenuLabel}" Padding="1" />
+                            <Label Name="itemLabel" FontSize="16" FontFamily="Segoe UI Semilight" Content="{Binding Key}" Target="commandButton" Style="{StaticResource MenuLabel}" Padding="3,1" />
                         </Button>
                         <DataTemplate.Triggers>
                             <EventTrigger RoutedEvent="FrameworkElement.Loaded" SourceName="commandButton">
@@ -259,9 +259,9 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="0" Name="topPaneRow" />
-                    <RowDefinition Height="1" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="0.7*" MinHeight="100" Name="textViewRow" />
+
+                    <RowDefinition Height="Auto" x:Name="languageComboRow" />
+                    <RowDefinition Height="*" MinHeight="100" Name="textViewRow" />
                     <RowDefinition Height="1" />
                     <RowDefinition Height="0" Name="bottomPaneRow" />
                 </Grid.RowDefinitions>
@@ -275,7 +275,7 @@
                     </DockPanel>
                 </Border>
 
-                <Grid Grid.Row="3">
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition Width="Auto" />
@@ -289,24 +289,25 @@
 
                 </Grid>
 
-                <controls:DockedPane x:Name="topPane" Grid.Row="1" Title="Top" Visibility="Collapsed" CloseButtonClicked="TopPane_CloseButtonClicked" Margin="0,0,25,0" Opacity="{DynamicResource MetroOpacity}" />
+                <controls:DockedPane x:Name="topPane" Grid.Row="1" Title="Top" Visibility="Collapsed" CloseButtonClicked="TopPane_CloseButtonClicked" Margin="0,0,25,25" Opacity="{DynamicResource MetroOpacity}" />
                 
                 <GridSplitter
                     Grid.ZIndex="1"
                     Grid.Row="2"
                     Margin="0,-2,0,-5"
                     BorderThickness="0,2,0,5"
+                    ResizeBehavior="PreviousAndNext"
                     BorderBrush="Transparent"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
+                    VerticalAlignment="Top"
                     Visibility="{Binding Visibility, ElementName=topPane}" />
                 
                 <!-- decompilerTextView is into the mainPane by code -->
-                <ContentPresenter Name="mainPane" Margin="0 0 25 25" Grid.Row="4" Opacity="{DynamicResource MetroOpacity}"/>
+                <ContentPresenter Name="mainPane" Margin="0 0 25 25" Grid.Row="3" Opacity="{DynamicResource MetroOpacity}"/>
                 
                 <GridSplitter
                     Grid.ZIndex="1"
-                    Grid.Row="5"
+                    Grid.Row="4"
                     Margin="0,-2,0,-5"
                     BorderThickness="0,2,0,5"
                     BorderBrush="Transparent"
@@ -314,7 +315,7 @@
                     VerticalAlignment="Center"
                     Visibility="{Binding Visibility, ElementName=bottomPane}" />
 
-                <controls:DockedPane x:Name="bottomPane" Grid.Row="6" Title="Bottom" Visibility="Collapsed" CloseButtonClicked="BottomPane_CloseButtonClicked" Margin="0, 25,25,25" Opacity="{DynamicResource MetroOpacity}" />
+                <controls:DockedPane x:Name="bottomPane" Grid.Row="5" Title="Bottom" Visibility="Collapsed" CloseButtonClicked="BottomPane_CloseButtonClicked" Margin="0, 25,25,25" Opacity="{DynamicResource MetroOpacity}" />
             </Grid>
         </Grid>
         
