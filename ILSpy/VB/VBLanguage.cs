@@ -23,7 +23,6 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Resources;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -45,7 +44,7 @@ namespace ICSharpCode.ILSpy.VB
 	[Export(typeof(Language))]
 	public class VBLanguage : Language
 	{
-		Predicate<IAstTransform> transformAbortCondition = null;
+		readonly Predicate<IAstTransform> transformAbortCondition = null;
 		bool showAllMembers = false;
 		
 		public VBLanguage()
@@ -313,8 +312,8 @@ namespace ICSharpCode.ILSpy.VB
 		#region WriteResourceFilesInProject
 		IEnumerable<Tuple<string, string>> WriteResourceFilesInProject(LoadedAssembly assembly, DecompilationOptions options, HashSet<string> directories)
 		{
-			AppDomain bamlDecompilerAppDomain = null;
-			try {
+			//AppDomain bamlDecompilerAppDomain = null;
+			//try {
 				foreach (EmbeddedResource r in assembly.AssemblyDefinition.MainModule.Resources.OfType<EmbeddedResource>()) {
 					string fileName;
 					Stream s = r.GetResourceStream();
@@ -365,11 +364,11 @@ namespace ICSharpCode.ILSpy.VB
 					}
 					yield return Tuple.Create("EmbeddedResource", fileName);
 				}
-			}
-			finally {
-				if (bamlDecompilerAppDomain != null)
-					AppDomain.Unload(bamlDecompilerAppDomain);
-			}
+			//}
+			//finally {
+			//    if (bamlDecompilerAppDomain != null)
+			//        AppDomain.Unload(bamlDecompilerAppDomain);
+			//}
 		}
 
 		string GetFileNameForResource(string fullName, HashSet<string> directories)
@@ -437,7 +436,7 @@ namespace ICSharpCode.ILSpy.VB
 			astBuilder.RunTransformations(transformAbortCondition);
 			if (options.DecompilerSettings.ShowXmlDocumentation)
 				AddXmlDocTransform.Run(astBuilder.CompilationUnit);
-			var unit = astBuilder.CompilationUnit.AcceptVisitor(new CSharpToVBConverterVisitor(new ILSpyEnvironmentProvider(CreateResolveContext(module))), null);
+			var unit = astBuilder.CompilationUnit.AcceptVisitor(new CSharpToVBConverterVisitor(new ILSpyEnvironmentProvider()), null);
 			var outputFormatter = new VBTextOutputFormatter(output);
 			var formattingPolicy = new VBFormattingOptions();
 			unit.AcceptVisitor(new OutputVisitor(outputFormatter, formattingPolicy), null);
@@ -479,25 +478,9 @@ namespace ICSharpCode.ILSpy.VB
 			return TypeToString(options, type, typeAttributes);
 		}
 		
-		ITypeResolveContext CreateResolveContext(ModuleDefinition module)
-		{
-			IProjectContent projectContent = new CecilTypeResolveContext(module);
-			
-			List<ITypeResolveContext> resolveContexts = new List<ITypeResolveContext>();
-			resolveContexts.Add(projectContent);
-			foreach (AssemblyNameReference r in module.AssemblyReferences) {
-				AssemblyDefinition d = module.AssemblyResolver.Resolve(r);
-				if (d != null) {
-					resolveContexts.Add(new CecilTypeResolveContext(d.MainModule));
-				}
-			}
-			
-			return new CompositeTypeResolveContext(resolveContexts);
-		}
-		
 		string TypeToString(ConvertTypeOptions options, TypeReference type, ICustomAttributeProvider typeAttributes = null)
 		{
-			var envProvider = new ILSpyEnvironmentProvider(CreateResolveContext(type.Module));
+			var envProvider = new ILSpyEnvironmentProvider();
 			var converter = new CSharpToVBConverterVisitor(envProvider);
 			var astType = AstBuilder.ConvertType(type, typeAttributes, options);
 			StringWriter w = new StringWriter();

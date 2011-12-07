@@ -51,7 +51,7 @@ namespace ICSharpCode.ILSpy
 	/// </summary>
 	partial class MainWindow : Window
 	{
-		NavigationHistory<NavigationState> history = new NavigationHistory<NavigationState>();
+		readonly NavigationHistory<NavigationState> history = new NavigationHistory<NavigationState>();
 		ILSpySettings spySettings;
 		internal SessionSettings sessionSettings;
 
@@ -175,7 +175,7 @@ namespace ICSharpCode.ILSpy
 		protected override void OnSourceInitialized(EventArgs e)
 		{
 			base.OnSourceInitialized(e);
-			HwndSource source = PresentationSource.FromVisual(this) as HwndSource;;
+			HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
 			if (source != null) {
 				source.AddHook(WndProc);
 			}
@@ -359,7 +359,7 @@ namespace ICSharpCode.ILSpy
 			
 			assemblyListTreeNode = new AssemblyListTreeNode(assemblyList);
 			assemblyListTreeNode.FilterSettings = sessionSettings.FilterSettings.Clone();
-			assemblyListTreeNode.Select = node => SelectNode(node);
+			assemblyListTreeNode.Select = SelectNode;
 			treeView.Root = assemblyListTreeNode;
 			
 			if (assemblyList.ListName == AssemblyListManager.DefaultListName)
