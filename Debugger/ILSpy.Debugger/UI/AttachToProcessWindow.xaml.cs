@@ -36,6 +36,7 @@ namespace ICSharpCode.ILSpy.Debugger.UI
 
 		void RefreshProcessList()
 		{
+            // consider using ICorPublish
 			ObservableCollection<RunningProcess> list = new ObservableCollection<RunningProcess>();
 			
 			Process currentProcess = Process.GetCurrentProcess();
@@ -44,6 +45,11 @@ namespace ICSharpCode.ILSpy.Debugger.UI
 					if (process.HasExited) continue;
 					// Prevent attaching to our own process.
 					if (currentProcess.Id != process.Id) {
+                        if (process.MainModule.ModuleName == "devenv.exe")
+                        {
+                            System.Diagnostics.Debug.Write(process);
+                        }
+                        System.Diagnostics.Debug.WriteLine("# of modules = " + process.Modules.Count);
 						bool managed = false;
 						try {
 							var modules = process.Modules.Cast<ProcessModule>().Where(
